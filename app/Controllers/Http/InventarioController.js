@@ -3,146 +3,154 @@
 const ExcelJS = require('exceljs')
 const Database = use('Database')
 const Helpers = use('Helpers')
+const Inventario = use('App/Models/Inventario')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with inventarios
- */
 class InventarioController {
-  /**
-   * Show a list of all inventarios.
-   * GET inventarios
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ request, response }) {
+    try {
+      const page = request.input('page', 1)
+      const limit = request.input('limit', 10)
+      const sortBy = request.input('sortBy', 'id')
+      const order = request.input('order', 'asc')
+      const search = request.input('search', '')
+
+      const query = Inventario.query()
+
+      if (search) {
+        query.where('codigo', 'LIKE', `%${search}%`)
+          .orWhere('descripcion', 'LIKE', `%${search}%`)
+          .orWhere('area_funcional', 'LIKE', `%${search}%`)
+          .orWhere('sistema', 'LIKE', `%${search}%`)
+      }
+
+      query.orderBy(sortBy, order)
+
+      const inventarios = await query.paginate(page, limit)
+
+      return response.status(200).json(inventarios)
+    } catch (error) {
+      return response.status(500).send(`Error al obtener inventarios: ${error.message}`)
+    }
   }
 
-  /**
-   * Render a form to be used for creating a new inventario.
-   * GET inventarios/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new inventario.
-   * POST inventarios
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response }) {
+    try {
+      const data = request.only([
+        'codigo',
+        'descripcion',
+        'datos',
+        'area_funcional',
+        'sistema',
+        'en_desarrollo',
+        'capa',
+        'usuario',
+        'documento_detalle',
+        'depende_de_la_plaza',
+        'comentarios',
+        'depende_del_entorno',
+        'ambiente_testing',
+        'pais',
+        'borrar'
+      ])
+
+      const inventario = await Inventario.create(data)
+      return response.status(201).json(inventario)
+    } catch (error) {
+      return response.status(500).send(`Error al crear inventario: ${error.message}`)
+    }
   }
 
-  /**
-   * Display a single inventario.
-   * GET inventarios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    try {
+      const inventario = await Inventario.findOrFail(params.id)
+      return response.status(200).json(inventario)
+    } catch (error) {
+      return response.status(404).send('Inventario no encontrado')
+    }
   }
 
-  /**
-   * Render a form to update an existing inventario.
-   * GET inventarios/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update inventario details.
-   * PUT or PATCH inventarios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    try {
+      const data = request.only([
+        'codigo',
+        'descripcion',
+        'datos',
+        'area_funcional',
+        'sistema',
+        'en_desarrollo',
+        'capa',
+        'usuario',
+        'documento_detalle',
+        'depende_de_la_plaza',
+        'comentarios',
+        'depende_del_entorno',
+        'ambiente_testing',
+        'pais',
+        'borrar'
+      ])
+
+      const inventario = await Inventario.findOrFail(params.id)
+      inventario.merge(data)
+      await inventario.save()
+
+      return response.status(200).json(inventario)
+    } catch (error) {
+      return response.status(500).send(`Error al actualizar inventario: ${error.message}`)
+    }
   }
 
-  /**
-   * Delete a inventario with id.
-   * DELETE inventarios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, response }) {
+    try {
+      const inventario = await Inventario.findOrFail(params.id)
+      await inventario.delete()
+
+      return response.status(200).send('Inventario eliminado exitosamente')
+    } catch (error) {
+      return response.status(500).send(`Error al eliminar inventario: ${error.message}`)
+    }
   }
 
   async import({ request, response }) {
     try {
-      // Ruta del archivo Excel
       const filePath = Helpers.publicPath('uploads/PRD_99000_GL_V3R1_ Inventario BBDD.41.xlsm')
-
-      // Leer el archivo Excel
       const workbook = new ExcelJS.Workbook()
       await workbook.xlsx.readFile(filePath)
-
-      // Obtener la primera hoja de trabajo (Inventario)
       const worksheet = workbook.getWorksheet('Inventario')
 
-      // Recorrer cada fila en la hoja de trabajo (a partir de la fila 5 para saltar los encabezados)
       worksheet.eachRow(async (row, rowNumber) => {
-        if (rowNumber >= 5) { // Ajusta el número de fila según tu estructura
-          // Obtener los valores de las celdas (ajustar los índices según tus columnas)
+        if (rowNumber >= 5) {
           const codigo = row.getCell(2).value || 'Desconocida' 
           const descripcion = row.getCell(3).value || 'Desconocida' 
           const datos = row.getCell(4).value || 'Desconocido'
-          const areaFuncional = row.getCell(5).value || 'Desconocido';
-          const sistema = row.getCell(6).value || 'Desconocido';
-          const enDesarrollo = row.getCell(7).value === 'SI' // Asumiendo que se usa 'SI' para true
+          const areaFuncional = row.getCell(5).value || 'Desconocido'
+          const sistema = row.getCell(6).value || 'Desconocido'
+          const enDesarrollo = row.getCell(7).value === 'SI'
           const capa = row.getCell(8).value || 'Desconocido'
-          const usuario = row.getCell(11).value || 'default_user' // Ajusta según tus datos
-          const documentoDetalle = row.getCell(12).value || 'N/A' // Ajusta según tus datos
-          const dependeDeLaPlaza = row.getCell(13).value === 'SI' // Asumiendo que se usa 'SI' para true
-          
+          const usuario = row.getCell(11).value || 'default_user'
+          const documentoDetalle = row.getCell(12).value || 'N/A'
+          const dependeDeLaPlaza = row.getCell(13).value === 'SI'
           const comentarios = row.getCell(14).value || ''
-          const dependeDelEntorno = row.getCell(15).value === 'SI' // Asumiendo que se usa 'SI' para true
-          const ambienteTesting = row.getCell(16).value || 'N/A' // Ajusta según tus datos
-          const pais = row.getCell(17).value || 'N/A' // Ajusta según tus datos
-          const borrar = row.getCell(18).value === 'SI' // Asumiendo que se usa 'SI' para true
+          const dependeDelEntorno = row.getCell(15).value === 'SI'
+          const ambienteTesting = row.getCell(16).value || 'N/A'
+          const pais = row.getCell(17).value || 'N/A'
+          const borrar = row.getCell(18).value === 'SI'
 
-          // Insertar en la base de datos
           await Database.table('inventarios').insert({
-            codigo: codigo,
-            descripcion: descripcion,
-            datos: datos,
+            codigo,
+            descripcion,
+            datos,
             area_funcional: areaFuncional,
-            sistema: sistema,
+            sistema,
             en_desarrollo: enDesarrollo,
-            capa: capa,
-            usuario: usuario,
+            capa,
+            usuario,
             documento_detalle: documentoDetalle,
             depende_de_la_plaza: dependeDeLaPlaza,
-            comentarios: comentarios,
+            comentarios,
             depende_del_entorno: dependeDelEntorno,
             ambiente_testing: ambienteTesting,
-            pais: pais,
-            borrar: borrar,
+            pais,
+            borrar,
             created_at: new Date(),
             updated_at: new Date()
           })
@@ -151,11 +159,9 @@ class InventarioController {
 
       return response.status(200).send('Datos importados exitosamente')
     } catch (error) {
-      console.error(error)
       return response.status(500).send(`Error al importar datos: ${error.message}`)
     }
   }
-
 }
 
 module.exports = InventarioController

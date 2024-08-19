@@ -25,7 +25,25 @@ Route.group(() => {
   Route.post('register', 'AuthController.register');
   //Route.put('profile', 'AuthController.profile').middleware(['auth:jwt']);
 
-   Route.get('import', 'InventarioController.import');
+  Route.get('import', 'InventarioController.import');
+  // Rutas para el CRUD de inventarios
+  Route.get('inventarios', 'InventarioController.index');
+  Route.post('inventarios', 'InventarioController.store');
+  Route.get('inventarios/:id', 'InventarioController.show');
+  Route.put('inventarios/:id', 'InventarioController.update');
+  Route.delete('inventarios/:id', 'InventarioController.destroy');
+
+  // Routes for Sistemas
+  Route.resource('sistemas', 'SistemaController').apiOnly()
+
+  // Routes for Areas Funcionales
+  Route.resource('areas', 'AreaController').apiOnly()
+
+  // Routes for Paises
+  Route.resource('paises', 'PaisController').apiOnly()
+
+
+
   // Route.post('categorias', 'CategoryController.store').middleware(['auth:jwt']);
   // Route.put('categorias/:id', 'CategoryController.update').middleware(['auth:jwt']);
   // Route.delete('categorias/:id', 'CategoryController.destroy').middleware(['auth:jwt']);
