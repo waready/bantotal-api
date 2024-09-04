@@ -4,9 +4,12 @@ const ExcelJS = require('exceljs')
 const Database = use('Database')
 const Helpers = use('Helpers')
 const Inventario = use('App/Models/Inventario')
+const AreaFuncional = use('App/Models/Area')
+const Sistema = use('App/Models/Sistema')
+const Pais = use('App/Models/Paises')
 
 class InventarioController {
-  async index ({ request, response }) {
+  async index({ request, response }) {
     try {
       const page = request.input('page', 1)
       const limit = request.input('limit', 10)
@@ -19,8 +22,12 @@ class InventarioController {
       if (search) {
         query.where('codigo', 'LIKE', `%${search}%`)
           .orWhere('descripcion', 'LIKE', `%${search}%`)
-          .orWhere('area_funcional', 'LIKE', `%${search}%`)
-          .orWhere('sistema', 'LIKE', `%${search}%`)
+          .orWhereHas('areaFuncional', (builder) => {
+            builder.where('nombre', 'LIKE', `%${search}%`)
+          })
+          .orWhereHas('sistema', (builder) => {
+            builder.where('sistema', 'LIKE', `%${search}%`)
+          })
       }
 
       query.orderBy(sortBy, order)
@@ -33,14 +40,14 @@ class InventarioController {
     }
   }
 
-  async store ({ request, response }) {
+  async store({ request, response }) {
     try {
       const data = request.only([
         'codigo',
         'descripcion',
         'datos',
-        'area_funcional',
-        'sistema',
+        'area_funcional_id',
+        'sistema_id',
         'en_desarrollo',
         'capa',
         'usuario',
@@ -49,9 +56,16 @@ class InventarioController {
         'comentarios',
         'depende_del_entorno',
         'ambiente_testing',
-        'pais',
+        'pais_id',
         'borrar'
       ])
+
+      // Validar la existencia de las relaciones
+      await AreaFuncional.findOrFail(data.area_funcional_id)
+      await Sistema.findOrFail(data.sistema_id)
+      if (data.pais_id) {
+        await Pais.findOrFail(data.pais_id)
+      }
 
       const inventario = await Inventario.create(data)
       return response.status(201).json(inventario)
@@ -60,7 +74,7 @@ class InventarioController {
     }
   }
 
-  async show ({ params, response }) {
+  async show({ params, response }) {
     try {
       const inventario = await Inventario.findOrFail(params.id)
       return response.status(200).json(inventario)
@@ -69,14 +83,14 @@ class InventarioController {
     }
   }
 
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
     try {
       const data = request.only([
         'codigo',
         'descripcion',
         'datos',
-        'area_funcional',
-        'sistema',
+        'area_funcional_id',
+        'sistema_id',
         'en_desarrollo',
         'capa',
         'usuario',
@@ -85,9 +99,16 @@ class InventarioController {
         'comentarios',
         'depende_del_entorno',
         'ambiente_testing',
-        'pais',
+        'pais_id',
         'borrar'
       ])
+
+      // Validar la existencia de las relaciones
+      await AreaFuncional.findOrFail(data.area_funcional_id)
+      await Sistema.findOrFail(data.sistema_id)
+      if (data.pais_id) {
+        await Pais.findOrFail(data.pais_id)
+      }
 
       const inventario = await Inventario.findOrFail(params.id)
       inventario.merge(data)
@@ -99,7 +120,7 @@ class InventarioController {
     }
   }
 
-  async destroy ({ params, response }) {
+  async destroy({ params, response }) {
     try {
       const inventario = await Inventario.findOrFail(params.id)
       await inventario.delete()
@@ -119,46 +140,59 @@ class InventarioController {
 
       worksheet.eachRow(async (row, rowNumber) => {
         if (rowNumber >= 5) {
-          const codigo = row.getCell(2).value || 'Desconocida' 
-          const descripcion = row.getCell(3).value || 'Desconocida' 
-          const datos = row.getCell(4).value || 'Desconocido'
-          const areaFuncional = row.getCell(5).value || 'Desconocido'
-          const sistema = row.getCell(6).value || 'Desconocido'
-          const enDesarrollo = row.getCell(7).value === 'SI'
-          const capa = row.getCell(8).value || 'Desconocido'
-          const usuario = row.getCell(11).value || 'default_user'
-          const documentoDetalle = row.getCell(12).value || 'N/A'
-          const dependeDeLaPlaza = row.getCell(13).value === 'SI'
-          const comentarios = row.getCell(14).value || ''
-          const dependeDelEntorno = row.getCell(15).value === 'SI'
-          const ambienteTesting = row.getCell(16).value || 'N/A'
-          const pais = row.getCell(17).value || 'N/A'
-          const borrar = row.getCell(18).value === 'SI'
+          try {
+            const codigo = row.getCell(2).value || 'Desconocida'
+            const descripcion = row.getCell(3).value || 'Desconocida'
+            const datos = row.getCell(4).value || 'Desconocido'
+            const areaFuncionalNombre = row.getCell(5).value || 'Desconocido'
+            const sistemaNombre = row.getCell(6).value || 'Desconocido'
+            const enDesarrollo = row.getCell(7).value === 'SI'
+            const capa = row.getCell(8).value || 'Desconocido'
+            const usuario = row.getCell(11).value || 'default_user'
+            const documentoDetalle = row.getCell(12).value || 'N/A'
+            const dependeDeLaPlaza = row.getCell(13).value === 'SI'
+            const comentarios = row.getCell(14).value || ''
+            const dependeDelEntorno = row.getCell(15).value === 'SI'
+            const ambienteTesting = row.getCell(16).value || 'N/A'
+            const paisNombre = row.getCell(17).value || null
+            const borrar = row.getCell(18).value === 'SI'
 
-          await Database.table('inventarios').insert({
-            codigo,
-            descripcion,
-            datos,
-            area_funcional: areaFuncional,
-            sistema,
-            en_desarrollo: enDesarrollo,
-            capa,
-            usuario,
-            documento_detalle: documentoDetalle,
-            depende_de_la_plaza: dependeDeLaPlaza,
-            comentarios,
-            depende_del_entorno: dependeDelEntorno,
-            ambiente_testing: ambienteTesting,
-            pais,
-            borrar,
-            created_at: new Date(),
-            updated_at: new Date()
-          })
+            // Intentar buscar las relaciones, pero si no se encuentran, continuar
+            const areaFuncional = areaFuncionalNombre ? await AreaFuncional.findBy('nombre', areaFuncionalNombre) : null
+            const sistema = sistemaNombre ? await Sistema.findBy('sistema', sistemaNombre): null
+            const pais = paisNombre ? await Pais.findBy('nombre', paisNombre) : null
+
+            // Insertar cada registro individualmente
+            await Database.table('inventarios').insert({
+              codigo,
+              descripcion,
+              datos,
+              area_funcional_id: areaFuncional ? areaFuncional.id : null,
+              sistema_id: sistema ? sistema.id : null,
+              en_desarrollo: enDesarrollo,
+              capa,
+              usuario,
+              documento_detalle: documentoDetalle,
+              depende_de_la_plaza: dependeDeLaPlaza,
+              comentarios,
+              depende_del_entorno: dependeDelEntorno,
+              ambiente_testing: ambienteTesting,
+              pais_id: pais ? pais.id : null,
+              borrar,
+              created_at: new Date(),
+              updated_at: new Date()
+            })
+
+            console.log(`Registro ${rowNumber} importado exitosamente.`)
+          } catch (rowError) {
+            console.error(`Error en la fila ${rowNumber}: ${rowError.message}`)
+          }
         }
       })
 
-      return response.status(200).send('Datos importados exitosamente')
+      return response.status(200).send('Intento de importación completado. Revisa la consola para detalles de errores.')
     } catch (error) {
+      console.error(`Error al importar datos: ${error.message}`)
       return response.status(500).send(`Error al importar datos: ${error.message}`)
     }
   }

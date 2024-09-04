@@ -6,7 +6,7 @@ const Schema = use('Schema')
 class PaisesSchema extends Schema {
   up () {
     this.create('paises', (table) => {
-      table.increments()
+      table.increments('id') // Auto-incrementing primary key
       table.string('nombre', 80).notNullable()
       table.string('codigo', 10).notNullable().unique()
       table.timestamps()
