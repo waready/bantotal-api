@@ -18,16 +18,14 @@ class InventarioController {
       const search = request.input('search', '')
 
       const query = Inventario.query()
+        .with('pais')           // Cargar relación con País
+        .with('sistema')        // Cargar relación con Sistema
+        .with('areaFuncional')  // Cargar relación con Área Funcional
+        .with('usuario')        // Cargar relación con Usuario
 
       if (search) {
         query.where('codigo', 'LIKE', `%${search}%`)
           .orWhere('descripcion', 'LIKE', `%${search}%`)
-          .orWhereHas('areaFuncional', (builder) => {
-            builder.where('nombre', 'LIKE', `%${search}%`)
-          })
-          .orWhereHas('sistema', (builder) => {
-            builder.where('sistema', 'LIKE', `%${search}%`)
-          })
       }
 
       query.orderBy(sortBy, order)
