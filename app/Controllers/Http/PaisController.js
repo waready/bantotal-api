@@ -4,7 +4,28 @@ const Pais = use('App/Models/Paises')
 
 class PaisController {
   async index({ request, response }) {
-    const paises = await Pais.all()
+
+    const page = request.input('page', 1)  // Página actual
+    const limit = request.input('limit', 10)  // Límite de registros por página
+    const search = request.input('search', '')  // Término de búsqueda
+    const sortBy = request.input('sortBy', 'id')  // Campo por el cual ordenar
+    const order = request.input('order', 'asc')  // Orden (ascendente o descendente)
+
+    // Crear la consulta base
+    let query = Pais.query()
+
+    // Agregar filtros de búsqueda si es necesario
+    if (search) {
+      query.where('codigo', 'LIKE', `%${search}%`)
+           .orWhere('nombre', 'LIKE', `%${search}%`)
+    }
+
+    // Aplicar ordenamiento
+    query.orderBy(sortBy, order)
+
+    // Paginación
+    const paises = await query.paginate(page, limit)
+
     return response.json(paises)
   }
 

@@ -4,7 +4,28 @@ const Area = use('App/Models/Area')
 
 class AreaController {
   async index({ request, response }) {
-    const areas = await Area.all()
+    const page = request.input('page', 1)  // Página actual
+    const limit = request.input('limit', 10)  // Límite de registros por página
+    const search = request.input('search', '')  // Término de búsqueda
+    const sortBy = request.input('sortBy', 'id')  // Campo por el cual ordenar
+    const order = request.input('order', 'asc')  // Orden (ascendente o descendente)
+
+    // Crear la consulta base
+    let query = Area.query()
+
+    // Agregar filtros de búsqueda si es necesario
+    if (search) {
+      query.where('nombre', 'LIKE', `%${search}%`)
+           .orWhere('codigo', 'LIKE', `%${search}%`)
+    }
+
+    // Aplicar ordenamiento
+    query.orderBy(sortBy, order)
+
+
+    // Paginación
+    const areas = await query.paginate(page, limit)
+
     return response.json(areas)
   }
 
