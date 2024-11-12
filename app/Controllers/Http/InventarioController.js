@@ -144,22 +144,21 @@ class InventarioController {
             const datos = row.getCell(4).value || 'Desconocido'
             const areaFuncionalNombre = row.getCell(5).value || 'Desconocido'
             const sistemaNombre = row.getCell(6).value || 'Desconocido'
-            const enDesarrollo = row.getCell(7).value === 'SI'
+            const enDesarrollo = row.getCell(7).value ||' '
             const capa = row.getCell(8).value || 'Desconocido'
             const usuario = row.getCell(11).value || 'default_user'
             const documentoDetalle = row.getCell(12).value || 'N/A'
-            const dependeDeLaPlaza = row.getCell(13).value === 'SI'
+            const dependeDeLaPlaza = row.getCell(13).value || ' '
             const comentarios = row.getCell(14).value || ''
-            const dependeDelEntorno = row.getCell(15).value === 'SI'
+            const dependeDelEntorno = row.getCell(15).value || ' '
             const ambienteTesting = row.getCell(16).value || 'N/A'
             const paisNombre = row.getCell(17).value || null
-            const borrar = row.getCell(18).value === 'SI'
+            const borrar = row.getCell(18).value ||  ' '
 
             // Intentar buscar las relaciones, pero si no se encuentran, continuar
             const areaFuncional = areaFuncionalNombre ? await AreaFuncional.findBy('nombre', areaFuncionalNombre) : null
             const sistema = sistemaNombre ? await Sistema.findBy('sistema', sistemaNombre): null
             const pais = paisNombre ? await Pais.findBy('nombre', paisNombre) : null
-
             // Insertar cada registro individualmente
             await Database.table('inventarios').insert({
               codigo,
