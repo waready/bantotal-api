@@ -9,6 +9,43 @@ const Sistema = use('App/Models/Sistema')
 const Pais = use('App/Models/Paises')
 
 class InventarioController {
+   /**
+   * @swagger
+   * /api/v1/inventarios:
+   *   get:
+   *     summary: Obtener la lista de inventarios
+   *     tags: [Inventario]
+   *     parameters:
+   *       - name: page
+   *         in: query
+   *         description: Número de página
+   *         required: false
+   *         type: integer
+   *       - name: limit
+   *         in: query
+   *         description: Cantidad de registros por página
+   *         required: false
+   *         type: integer
+   *       - name: search
+   *         in: query
+   *         description: Término de búsqueda
+   *         required: false
+   *         type: string
+   *       - name: sortBy
+   *         in: query
+   *         description: Campo por el cual ordenar
+   *         required: false
+   *         type: string
+   *       - name: order
+   *         in: query
+   *         description: Orden (ascendente o descendente)
+   *         required: false
+   *         type: string
+   *         enum: [asc, desc]
+   *     responses:
+   *       200:
+   *         description: Lista de inventarios paginada
+   */
   async index({ request, response }) {
     try {
       const page = request.input('page', 1)
@@ -38,6 +75,67 @@ class InventarioController {
     }
   }
 
+    /**
+   * @swagger
+   * /api/v1/inventarios:
+   *   post:
+   *     summary: Crear un inventario
+   *     tags: [Inventario]
+   *     parameters:
+   *       - name: codigo
+   *         in: query
+   *         description: Código del inventario
+   *         required: true
+   *         type: string
+   *       - name: descripcion
+   *         in: query
+   *         description: Descripción del inventario
+   *         required: true
+   *         type: string
+   *       - name: datos
+   *         in: query
+   *         description: Datos del inventario
+   *         required: false
+   *         type: string
+   *       - name: area_funcional_id
+   *         in: query
+   *         description: ID del área funcional asociada
+   *         required: true
+   *         type: integer
+   *       - name: sistema_id
+   *         in: query
+   *         description: ID del sistema asociado
+   *         required: true
+   *         type: integer
+   *       - name: en_desarrollo
+   *         in: query
+   *         description: Estado de desarrollo
+   *         required: false
+   *         type: boolean
+   *       - name: capa
+   *         in: query
+   *         description: Capa del inventario
+   *         required: false
+   *         type: string
+   *       - name: usuario
+   *         in: query
+   *         description: Usuario asociado al inventario
+   *         required: false
+   *         type: string
+   *       - name: documento_detalle
+   *         in: query
+   *         description: Detalles del documento
+   *         required: false
+   *         type: string
+   *       - name: pais_id
+   *         in: query
+   *         description: ID del país asociado
+   *         required: false
+   *         type: integer
+   *     responses:
+   *       201:
+   *         description: Inventario creado
+   */
   async store({ request, response }) {
     try {
       const data = request.only([
@@ -72,6 +170,22 @@ class InventarioController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/v1/inventarios/{id}:
+   *   get:
+   *     summary: Obtener un inventario por ID
+   *     tags: [Inventario]
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: ID del inventario
+   *         required: true
+   *         type: integer
+   *     responses:
+   *       200:
+   *         description: Datos del inventario
+   */
   async show({ params, response }) {
     try {
       const inventario = await Inventario.findOrFail(params.id)
@@ -81,6 +195,72 @@ class InventarioController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/v1/inventarios/{id}:
+   *   put:
+   *     summary: Actualizar un inventario
+   *     tags: [Inventario]
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: ID del inventario
+   *         required: true
+   *         type: integer
+   *       - name: codigo
+   *         in: query
+   *         description: Código del inventario
+   *         required: false
+   *         type: string
+   *       - name: descripcion
+   *         in: query
+   *         description: Descripción del inventario
+   *         required: false
+   *         type: string
+   *       - name: datos
+   *         in: query
+   *         description: Datos del inventario
+   *         required: false
+   *         type: string
+   *       - name: area_funcional_id
+   *         in: query
+   *         description: ID del área funcional asociada
+   *         required: false
+   *         type: integer
+   *       - name: sistema_id
+   *         in: query
+   *         description: ID del sistema asociado
+   *         required: false
+   *         type: integer
+   *       - name: en_desarrollo
+   *         in: query
+   *         description: Estado de desarrollo
+   *         required: false
+   *         type: boolean
+   *       - name: capa
+   *         in: query
+   *         description: Capa del inventario
+   *         required: false
+   *         type: string
+   *       - name: usuario
+   *         in: query
+   *         description: Usuario asociado al inventario
+   *         required: false
+   *         type: string
+   *       - name: documento_detalle
+   *         in: query
+   *         description: Detalles del documento
+   *         required: false
+   *         type: string
+   *       - name: pais_id
+   *         in: query
+   *         description: ID del país asociado
+   *         required: false
+   *         type: integer
+   *     responses:
+   *       200:
+   *         description: Inventario actualizado
+   */
   async update({ params, request, response }) {
     try {
       const data = request.only([
@@ -118,6 +298,22 @@ class InventarioController {
     }
   }
 
+   /**
+   * @swagger
+   * /api/v1/inventarios/{id}:
+   *   delete:
+   *     summary: Eliminar un inventario
+   *     tags: [Inventario]
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: ID del inventario a eliminar
+   *         required: true
+   *         type: integer
+   *     responses:
+   *       204:
+   *         description: Inventario eliminado correctamente
+   */
   async destroy({ params, response }) {
     try {
       const inventario = await Inventario.findOrFail(params.id)
