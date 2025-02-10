@@ -10,7 +10,7 @@ module.exports = {
   */
 
   enable: true,
-  specUrl: 'http://104.131.72.170:3333/docs',
+  specUrl: '/swagger.json',
 
   options: {
     swaggerDefinition: {
