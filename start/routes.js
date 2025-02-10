@@ -27,8 +27,8 @@ Route.group(() => {
 
   Route.get('import', 'InventarioController.import');
   // Rutas para el CRUD de inventarios
-  Route.get('inventarios', 'InventarioController.index').middleware(['auth:jwt']);
-  
+  Route.get('inventarios', 'InventarioController.index');
+
   Route.post('inventarios', 'InventarioController.store');
   Route.get('inventarios/:id', 'InventarioController.show');
   Route.put('inventarios/:id', 'InventarioController.update');
@@ -38,10 +38,10 @@ Route.group(() => {
   Route.resource('sistemas', 'SistemaController').apiOnly()
 
   // Routes for Areas Funcionales
-  Route.resource('areas', 'AreaController').apiOnly().middleware(['auth:jwt']);
+  Route.resource('areas', 'AreaController').apiOnly();
 
   // Routes for Paises
-  Route.resource('paises', 'PaisController').apiOnly().middleware(['auth:jwt']);
+  Route.resource('paises', 'PaisController').apiOnly();
 
 
 
