@@ -9,43 +9,43 @@ const Sistema = use('App/Models/Sistema')
 const Pais = use('App/Models/Paises')
 
 class InventarioController {
-   /**
-   * @swagger
-   * /api/v1/inventarios:
-   *   get:
-   *     summary: Obtener la lista de inventarios
-   *     tags: [Inventario]
-   *     parameters:
-   *       - name: page
-   *         in: query
-   *         description: Número de página
-   *         required: false
-   *         type: integer
-   *       - name: limit
-   *         in: query
-   *         description: Cantidad de registros por página
-   *         required: false
-   *         type: integer
-   *       - name: search
-   *         in: query
-   *         description: Término de búsqueda
-   *         required: false
-   *         type: string
-   *       - name: sortBy
-   *         in: query
-   *         description: Campo por el cual ordenar
-   *         required: false
-   *         type: string
-   *       - name: order
-   *         in: query
-   *         description: Orden (ascendente o descendente)
-   *         required: false
-   *         type: string
-   *         enum: [asc, desc]
-   *     responses:
-   *       200:
-   *         description: Lista de inventarios paginada
-   */
+  /**
+  * @swagger
+  * /api/v1/inventarios:
+  *   get:
+  *     summary: Obtener la lista de inventarios
+  *     tags: [Inventario]
+  *     parameters:
+  *       - name: page
+  *         in: query
+  *         description: Número de página
+  *         required: false
+  *         type: integer
+  *       - name: limit
+  *         in: query
+  *         description: Cantidad de registros por página
+  *         required: false
+  *         type: integer
+  *       - name: search
+  *         in: query
+  *         description: Término de búsqueda
+  *         required: false
+  *         type: string
+  *       - name: sortBy
+  *         in: query
+  *         description: Campo por el cual ordenar
+  *         required: false
+  *         type: string
+  *       - name: order
+  *         in: query
+  *         description: Orden (ascendente o descendente)
+  *         required: false
+  *         type: string
+  *         enum: [asc, desc]
+  *     responses:
+  *       200:
+  *         description: Lista de inventarios paginada
+  */
   async index({ request, response }) {
     try {
       const page = request.input('page', 1)
@@ -75,67 +75,67 @@ class InventarioController {
     }
   }
 
-    /**
-   * @swagger
-   * /api/v1/inventarios:
-   *   post:
-   *     summary: Crear un inventario
-   *     tags: [Inventario]
-   *     parameters:
-   *       - name: codigo
-   *         in: query
-   *         description: Código del inventario
-   *         required: true
-   *         type: string
-   *       - name: descripcion
-   *         in: query
-   *         description: Descripción del inventario
-   *         required: true
-   *         type: string
-   *       - name: datos
-   *         in: query
-   *         description: Datos del inventario
-   *         required: false
-   *         type: string
-   *       - name: area_funcional_id
-   *         in: query
-   *         description: ID del área funcional asociada
-   *         required: true
-   *         type: integer
-   *       - name: sistema_id
-   *         in: query
-   *         description: ID del sistema asociado
-   *         required: true
-   *         type: integer
-   *       - name: en_desarrollo
-   *         in: query
-   *         description: Estado de desarrollo
-   *         required: false
-   *         type: boolean
-   *       - name: capa
-   *         in: query
-   *         description: Capa del inventario
-   *         required: false
-   *         type: string
-   *       - name: usuario
-   *         in: query
-   *         description: Usuario asociado al inventario
-   *         required: false
-   *         type: string
-   *       - name: documento_detalle
-   *         in: query
-   *         description: Detalles del documento
-   *         required: false
-   *         type: string
-   *       - name: pais_id
-   *         in: query
-   *         description: ID del país asociado
-   *         required: false
-   *         type: integer
-   *     responses:
-   *       201:
-   *         description: Inventario creado
-   */
+  /**
+ * @swagger
+ * /api/v1/inventarios:
+ *   post:
+ *     summary: Crear un inventario
+ *     tags: [Inventario]
+ *     parameters:
+ *       - name: codigo
+ *         in: query
+ *         description: Código del inventario
+ *         required: true
+ *         type: string
+ *       - name: descripcion
+ *         in: query
+ *         description: Descripción del inventario
+ *         required: true
+ *         type: string
+ *       - name: datos
+ *         in: query
+ *         description: Datos del inventario
+ *         required: false
+ *         type: string
+ *       - name: area_funcional_id
+ *         in: query
+ *         description: ID del área funcional asociada
+ *         required: true
+ *         type: integer
+ *       - name: sistema_id
+ *         in: query
+ *         description: ID del sistema asociado
+ *         required: true
+ *         type: integer
+ *       - name: en_desarrollo
+ *         in: query
+ *         description: Estado de desarrollo
+ *         required: false
+ *         type: boolean
+ *       - name: capa
+ *         in: query
+ *         description: Capa del inventario
+ *         required: false
+ *         type: string
+ *       - name: usuario
+ *         in: query
+ *         description: Usuario asociado al inventario
+ *         required: false
+ *         type: string
+ *       - name: documento_detalle
+ *         in: query
+ *         description: Detalles del documento
+ *         required: false
+ *         type: string
+ *       - name: pais_id
+ *         in: query
+ *         description: ID del país asociado
+ *         required: false
+ *         type: integer
+ *     responses:
+ *       201:
+ *         description: Inventario creado
+ */
   async store({ request, response }) {
     try {
       const data = request.only([
@@ -298,22 +298,22 @@ class InventarioController {
     }
   }
 
-   /**
-   * @swagger
-   * /api/v1/inventarios/{id}:
-   *   delete:
-   *     summary: Eliminar un inventario
-   *     tags: [Inventario]
-   *     parameters:
-   *       - name: id
-   *         in: path
-   *         description: ID del inventario a eliminar
-   *         required: true
-   *         type: integer
-   *     responses:
-   *       204:
-   *         description: Inventario eliminado correctamente
-   */
+  /**
+  * @swagger
+  * /api/v1/inventarios/{id}:
+  *   delete:
+  *     summary: Eliminar un inventario
+  *     tags: [Inventario]
+  *     parameters:
+  *       - name: id
+  *         in: path
+  *         description: ID del inventario a eliminar
+  *         required: true
+  *         type: integer
+  *     responses:
+  *       204:
+  *         description: Inventario eliminado correctamente
+  */
   async destroy({ params, response }) {
     try {
       const inventario = await Inventario.findOrFail(params.id)
@@ -340,7 +340,7 @@ class InventarioController {
             const datos = row.getCell(4).value || 'Desconocido'
             const areaFuncionalNombre = row.getCell(5).value || 'Desconocido'
             const sistemaNombre = row.getCell(6).value || 'Desconocido'
-            const enDesarrollo = row.getCell(7).value ||' '
+            const enDesarrollo = row.getCell(7).value || ' '
             const capa = row.getCell(8).value || 'Desconocido'
             const usuario = row.getCell(11).value || 'default_user'
             const documentoDetalle = row.getCell(12).value || 'N/A'
@@ -349,11 +349,11 @@ class InventarioController {
             const dependeDelEntorno = row.getCell(15).value || ' '
             const ambienteTesting = row.getCell(16).value || 'N/A'
             const paisNombre = row.getCell(17).value || null
-            const borrar = row.getCell(18).value ||  ' '
+            const borrar = row.getCell(18).value || ' '
 
             // Intentar buscar las relaciones, pero si no se encuentran, continuar
             const areaFuncional = areaFuncionalNombre ? await AreaFuncional.findBy('nombre', areaFuncionalNombre) : null
-            const sistema = sistemaNombre ? await Sistema.findBy('sistema', sistemaNombre): null
+            const sistema = sistemaNombre ? await Sistema.findBy('sistema', sistemaNombre) : null
             const pais = paisNombre ? await Pais.findBy('nombre', paisNombre) : null
             // Insertar cada registro individualmente
             await Database.table('inventarios').insert({
@@ -387,6 +387,68 @@ class InventarioController {
     } catch (error) {
       console.error(`Error al importar datos: ${error.message}`)
       return response.status(500).send(`Error al importar datos: ${error.message}`)
+    }
+  }
+
+  async generadorRpt({ request, response }) {
+    try {
+      const rawQuery = request.input('query')
+
+      // ⚠️ Seguridad: podrías validar o sanitizar antes de ejecutar
+      const resultados = await Database.raw(rawQuery)
+
+      const workbook = new ExcelJS.Workbook()
+      const sheet = workbook.addWorksheet('Reporte')
+
+      if (resultados.length === 0) {
+        return response.status(400).json({ error: 'No hay datos para mostrar.' })
+      }
+
+      // Obtener columnas
+      const headers = Object.keys(resultados[0])
+      sheet.columns = headers.map(col => ({
+        header: col.toUpperCase(),
+        key: col,
+        width: 20
+      }))
+
+      // Aplicar estilos al header
+      headers.forEach((col, i) => {
+        const cell = sheet.getCell(`${String.fromCharCode(65 + i)}1`)
+        cell.font = { bold: true, color: { argb: 'FF000000' } }
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFEEEEEE' }
+        }
+        cell.alignment = {
+          horizontal: 'center',
+          vertical: 'middle',
+          wrapText: true
+        }
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        }
+      })
+
+      // Agregar los datos
+      resultados.forEach(row => {
+        sheet.addRow(row)
+      })
+
+      // Configurar cabeceras de descarga
+      response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+      response.header('Content-Disposition', 'attachment; filename="reporte.xlsx"')
+      response.header('Cache-Control', 'no-cache')
+
+      await workbook.xlsx.write(response.response)
+      response.send()
+
+    } catch (error) {
+      return response.status(500).json({ error: error.message })
     }
   }
 }

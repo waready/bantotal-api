@@ -16,7 +16,8 @@ const providers = [
   '@adonisjs/bodyparser/providers/BodyParserProvider',
   '@adonisjs/cors/providers/CorsProvider',
   '@adonisjs/lucid/providers/LucidProvider',
-  'adonis-swagger/providers/SwaggerProvider'
+  'adonis-swagger/providers/SwaggerProvider',
+  '@rocketseat/adonis-acl/providers/AclProvider',
 ]
 
 /*
@@ -29,7 +30,8 @@ const providers = [
 |
 */
 const aceProviders = [
-  '@adonisjs/lucid/providers/MigrationsProvider'
+  '@adonisjs/lucid/providers/MigrationsProvider',
+  '@rocketseat/adonis-acl/providers/CommandsProvider',
 ]
 
 /*
@@ -54,6 +56,9 @@ const aliases = {}
 | Here you store ace commands for your package
 |
 */
-const commands = []
+const commands = [
+  'adonis-acl/commands/Role',
+  'adonis-acl/commands/Permission',
+]
 
 module.exports = { providers, aceProviders, aliases, commands }

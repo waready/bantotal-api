@@ -43,7 +43,8 @@ Route.group(() => {
   // Routes for Paises
   Route.resource('paises', 'PaisController').apiOnly();
 
-
+  // Generador de Reportes
+  Route.post('/generar-reporte', 'InventarioController.generadorRpt')
 
   // Route.post('categorias', 'CategoryController.store').middleware(['auth:jwt']);
   // Route.put('categorias/:id', 'CategoryController.update').middleware(['auth:jwt']);
