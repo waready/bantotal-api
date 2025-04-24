@@ -55,6 +55,3 @@ Route.group(() => {
   // Route.put('scp-items/:id', 'ItemScpController.update').middleware(['auth:jwt']);
   // Route.delete('scp-items/:id', 'ItemScpController.destroy').middleware(['auth:jwt']);
 }).prefix('api/v1');
-
-Route.get('/docs/swagger.json', async ({ swagger }) => swagger.json())
-Route.get('/docs', async ({ swagger }) => swagger.ui('swagger.json'))
