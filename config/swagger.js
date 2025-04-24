@@ -10,7 +10,7 @@ module.exports = {
   */
 
   enable: true,
-  specUrl: '/swagger.json',
+  specUrl: 'swagger.json',
 
   options: {
     swaggerDefinition: {
@@ -27,7 +27,7 @@ module.exports = {
         }
       },
 
-      basePath: '/',
+      basePath: '/docs/',
 
       // Example security definitions.
       securityDefinitions: {
