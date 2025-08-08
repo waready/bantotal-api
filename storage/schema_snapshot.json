@@ -1,0 +1,498 @@
+{
+  "adonis_schema": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "batch",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "migration_time",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "areas": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "nombre",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "codigo",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "audits": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "auditable_type",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "auditable_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "event",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "old_values",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "new_values",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "inventarios": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "codigo",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "descripcion",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "datos",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "area_funcional_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "sistema_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "pais_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "en_desarrollo",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "capa",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "usuario",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "documento_detalle",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "depende_de_la_plaza",
+      "type": "boolean",
+      "nullable": true
+    },
+    {
+      "name": "comentarios",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "depende_del_entorno",
+      "type": "boolean",
+      "nullable": true
+    },
+    {
+      "name": "ambiente_testing",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "borrar",
+      "type": "boolean",
+      "nullable": true
+    },
+    {
+      "name": "user_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "paises": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "nombre",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "codigo",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "permissions": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "roles": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "name",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "roles_permissions": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "permission_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "role_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "sistemas": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "cod_area_funcional",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "cod_sistema",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "corr",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "sistema",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "tokens": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "user_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "token",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "type",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "is_revoked",
+      "type": "boolean",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "users": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "username",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "email",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "password",
+      "type": "character varying",
+      "nullable": false
+    },
+    {
+      "name": "nombre",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "login_ldap",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "avatar_url",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "foto",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "externo_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "rol_externo",
+      "type": "character varying",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "users_permissions": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "permission_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "user_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ],
+  "users_roles": [
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "role_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "user_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    }
+  ]
+}

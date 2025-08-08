@@ -1,5 +1,5 @@
 'use strict'
-
+const path = require('path')
 /*
 |--------------------------------------------------------------------------
 | Providers
@@ -18,6 +18,7 @@ const providers = [
   '@adonisjs/lucid/providers/LucidProvider',
   'adonis-swagger/providers/SwaggerProvider',
   '@rocketseat/adonis-acl/providers/AclProvider',
+  'adonis-auditable/providers/AuditableProvider'
 ]
 
 /*
@@ -59,6 +60,7 @@ const aliases = {}
 const commands = [
   'adonis-acl/commands/Role',
   'adonis-acl/commands/Permission',
+  path.join(__dirname, '../app/Commands/SchemaSnapshot')
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }

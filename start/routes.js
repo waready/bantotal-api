@@ -44,17 +44,37 @@ Route.group(() => {
   Route.resource('paises', 'PaisController').apiOnly();
 
   // Generador de Reportes
-  Route.post('/generar-reporte', 'InventarioController.generadorRpt')
+  Route.post('/generar-reporte', 'InventarioController.generadorRpt');
 
-  // Route.post('categorias', 'CategoryController.store').middleware(['auth:jwt']);
-  // Route.put('categorias/:id', 'CategoryController.update').middleware(['auth:jwt']);
-  // Route.delete('categorias/:id', 'CategoryController.destroy').middleware(['auth:jwt']);
+  // Roles
+  Route.get('roles', 'RoleController.index');
+  Route.post('roles', 'RoleController.store');
+  Route.get('roles/:id', 'RoleController.show');
+  Route.put('roles/:id', 'RoleController.update');
+  Route.delete('roles/:id', 'RoleController.destroy');
 
-  // Route.get('scp-items', 'ItemScpController.index');
-  // Route.post('scp-items', 'ItemScpController.store').middleware(['auth:jwt']);
-  // Route.put('scp-items/:id', 'ItemScpController.update').middleware(['auth:jwt']);
-  // Route.delete('scp-items/:id', 'ItemScpController.destroy').middleware(['auth:jwt']);
+  // Usuarios
+  Route.get('users', 'UserController.index');
+  Route.post('users', 'UserController.store');
+  Route.put('users/:id', 'UserController.update');
+  Route.delete('users/:id', 'UserController.destroy');
+
+  // Permisos
+  Route.get('permissions', 'PermissionController.index');
+  Route.post('permissions', 'PermissionController.store');
+  Route.get('permissions/:id', 'PermissionController.show');  
+  Route.put('permissions/:id', 'PermissionController.update');
+  Route.delete('permissions/:id', 'PermissionController.destroy');
+
+  //asistente LDAP
+  Route.post('reports/nl', 'InventarioController.descargarReporteIA')
+
 }).prefix('api/v1');
 
-  Route.get('/swagger.json', async ({ swagger }) => swagger.json())
-  Route.get('/docs', async ({ swagger }) => swagger.ui('swagger.json'))
+Route.get('/swagger.json', async ({ swagger }) => swagger.json());
+Route.get('/docs', async ({ swagger }) => swagger.ui('swagger.json'));
+// schema
+Route.group(() => {
+  Route.post('schema/add-column', 'SchemaController.addColumn')
+  Route.post('schema/rename-column', 'SchemaController.renameColumn')
+}).prefix('admin').middleware(['auth', 'is:admin'])

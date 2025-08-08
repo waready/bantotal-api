@@ -27,8 +27,12 @@
     "@prisma/client": "^6.3.1",
     "@rocketseat/adonis-acl": "^1.2.2",
     "adonis-acl": "^1.1.1",
+    "adonis-auditable": "^2.0.1",
     "adonis-swagger": "^1.2.9",
+    "axios": "^1.11.0",
     "exceljs": "^4.4.0",
+    "pg": "^8.16.3",
+    "sql-formatter": "^15.6.6",
     "sqlite3": "^5.1.7"
   },
   "autoload": {
